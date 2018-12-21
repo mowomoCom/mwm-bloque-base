@@ -22,27 +22,37 @@ const run = async () => {
   fs.readFile("./mwm-bloque-base.php", "utf8", function(err, contents) {
     let blockName = contents.split(" * @package ");
     blockName = blockName[1].split(" ");
-    blockName = blockName[0].slice(0, -2);
+    blockName = blockName[0].split("\n");
+    blockName = blockName[0].split("\r");
+    blockName = blockName[0];
 
-    if (!fs.existsSync("./" + blockName + "/")) {
-      fs.mkdirSync("./" + blockName + "/");
+    if (!fs.existsSync("./exports/" + blockName + "/")) {
+      fs.mkdirSync("./exports/" + blockName + "/");
     }
 
-    if (!fs.existsSync("./" + blockName + "/build/")) {
-      fs.mkdirSync("./" + blockName + "/build/");
+    if (!fs.existsSync("./exports/" + blockName + "/build/")) {
+      fs.mkdirSync("./exports/" + blockName + "/build/");
     }
 
-    copyFile("./build/block.build.js", "./" + blockName + "/build/");
-    copyFile("./build/block.editor.build.css", "./" + blockName + "/build/");
-    copyFile("./build/block.style.build.css", "./" + blockName + "/build/");
-    copyFile("./mwm-bloque-base.php", "./" + blockName + "/");
+    copyFile("./build/block.build.js", "./exports/" + blockName + "/build/");
+    copyFile(
+      "./build/block.editor.build.css",
+      "./exports/" + blockName + "/build/"
+    );
+    copyFile(
+      "./build/block.style.build.css",
+      "./exports/" + blockName + "/build/"
+    );
+    copyFile("./mwm-bloque-base.php", "./exports/" + blockName + "/");
     fs.rename(
-      "./" + blockName + "/mwm-bloque-base.php",
-      "./" + blockName + "/generador-" + blockName + ".php",
+      "./exports/" + blockName + "/mwm-bloque-base.php",
+      "./exports/" + blockName + "/generador-" + blockName + ".php",
       err => {
         if (err) console.log("ERROR: " + err);
       }
     );
+
+    console.log("Exportación lista");
   });
 };
 
